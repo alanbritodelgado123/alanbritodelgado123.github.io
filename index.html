@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="background-canvas" aria-hidden="true"></canvas>
+  
+  <header>
+    <nav class="nav-bar" role="navigation" aria-label="Navegación principal">
+      <div class="logo" aria-label="Logo Quizzz">
+        <span style="font-size: 2rem;">🎯</span>
+        Quizzz
+      </div>
+      <ul class="nav-links" role="menubar">
+        <li><a href="#" data-section="home" role="menuitem" tabindex="0">Inicio</a></li>
+        <li><a href="#" data-section="categories" role="menuitem" tabindex="0">Jugar</a></li>
+        <li><a href="#" data-section="settings" role="menuitem" tabindex="0">Configuración</a></li>
+      </ul>
+      <div class="user-info" aria-label="Usuario actual">
+        <span id="user-avatar" aria-label="Avatar">🦁</span>
+        <span id="user-name" aria-label="Nombre de usuario">Ali</span>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Sección de inicio -->
+    <section id="home" class="section active" aria-labelledby="home-title">
+      <div class="home-card">
+        <h1 id="home-title">Bienvenido al Juego de Preguntas</h1>
+        <p>Pon a prueba tus conocimientos con preguntas variadas.</p>
+        <button class="start-btn" data-category="general" aria-label="Comenzar Quiz General">Comenzar</button>
+      </div>
+    </section>
+
+    <!-- Sección de categorías -->
+    <section id="categories" class="section" aria-labelledby="categories-title">
+      <div class="categories-container">
+        <h2 id="categories-title">Selecciona una Categoría</h2>
+        <div class="categories-grid" role="list">
+          <div class="category-card available" data-category="general" role="listitem" tabindex="0" aria-label="Conocimientos Generales">
+            <div class="category-icon" aria-hidden="true">🌍</div>
+            <h3>Conocimientos Generales</h3>
+            <p>Preguntas variadas de cultura general</p>
+            <div class="category-status available">Disponible</div>
+          </div>
+          <div class="category-card disabled" role="listitem" aria-disabled="true" tabindex="-1">
+            <div class="category-icon" aria-hidden="true">🧪</div>
+            <h3>Ciencias</h3>
+            <p>Física, química, biología y más</p>
+            <div class="category-status disabled">En construcción</div>
+          </div>
+          <div class="category-card disabled" role="listitem" aria-disabled="true" tabindex="-1">
+            <div class="category-icon" aria-hidden="true">🏛️</div>
+            <h3>Historia</h3>
+            <p>Eventos históricos importantes</p>
+            <div class="category-status disabled">En construcción</div>
+          </div>
+          <div class="category-card disabled" role="listitem" aria-disabled="true" tabindex="-1">
+            <div class="category-icon" aria-hidden="true">⚽</div>
+            <h3>Deportes</h3>
+            <p>Fútbol, basketball, olimpiadas</p>
+            <div class="category-status disabled">En construcción</div>
+          </div>
+          <div class="category-card disabled" role="listitem" aria-disabled="true" tabindex="-1">
+            <div class="category-icon" aria-hidden="true">🎬</div>
+            <h3>Entretenimiento</h3>
+            <p>Películas, música, celebridades</p>
+            <div class="category-status disabled">En construcción</div>
+          </div>
+          <div class="category-card disabled" role="listitem" aria-disabled="true" tabindex="-1">
+            <div class="category-icon" aria-hidden="true">💻</div>
+            <h3>Tecnología</h3>
+            <p>Programación, gadgets, internet</p>
+            <div class="category-status disabled">En construcción</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de quiz -->
+    <section id="quizzes" class="section" aria-label="Quiz en progreso">
+      <div id="quiz-container"></div>
+    </section>
+
+    <!-- Sección de configuración -->
+    <section id="settings" class="section" aria-labelledby="settings-title">
+      <h2 id="settings-title">Configuración</h2>
+      <form autocomplete="off" aria-label="Formulario de configuración">
+        <fieldset class="setting-group">
+          <legend>Tema:</legend>
+          <div class="theme-selector" role="radiogroup" aria-label="Selector de tema">
+            <label class="theme-option" data-theme="dark" aria-checked="true" tabindex="0">
+              <input type="radio" name="theme" value="dark" id="dark-theme" checked aria-label="Modo Oscuro">
+              <span class="theme-icon">🌙</span>
+              <span>Modo Oscuro</span>
+            </label>
+            <label class="theme-option" data-theme="light" aria-checked="false" tabindex="0">
+              <input type="radio" name="theme" value="light" id="light-theme" aria-label="Modo Claro">
+              <span class="theme-icon">☀️</span>
+              <span>Modo Claro</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="setting-group">
+          <label for="username">Nombre de usuario:</label>
+          <input type="text" id="username" placeholder="Escribe tu nombre" autocomplete="off" maxlength="20" aria-label="Nombre de usuario">
+        </fieldset>
+
+        <fieldset class="setting-group">
+          <label for="difficulty">Dificultad:</label>
+          <select id="difficulty" aria-label="Selector de dificultad">
+            <option value="easy">Fácil (20 segundos por pregunta)</option>
+            <option value="medium" selected>Media (15 segundos por pregunta)</option>
+            <option value="hard">Difícil (10 segundos por pregunta)</option>
+          </select>
+          <div class="difficulty-info" aria-live="polite">
+            <p><strong>Fácil:</strong> 20 segundos, pista disponible, respuestas más obvias</p>
+            <p><strong>Media:</strong> 15 segundos, pista disponible, dificultad equilibrada</p>
+            <p><strong>Difícil:</strong> 10 segundos, sin pistas, preguntas más complejas</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="setting-group">
+          <legend>Avatar</legend>
+          <div class="avatar-selection" role="radiogroup" aria-label="Selector de avatar">
+            <label>
+              <input type="radio" name="avatar" value="🦁" checked aria-label="León">
+              <span class="avatar-box">🦁</span>
+            </label>
+            <label>
+              <input type="radio" name="avatar" value="🐱" aria-label="Gato">
+              <span class="avatar-box">🐱</span>
+            </label>
+            <label>
+              <input type="radio" name="avatar" value="🦉" aria-label="Búho">
+              <span class="avatar-box">🦉</span>
+            </label>
+            <label>
+              <input type="radio" name="avatar" value="🐵" aria-label="Mono">
+              <span class="avatar-box">🐵</span>
+            </label>
+            <label>
+              <input type="radio" name="avatar" value="🐧" aria-label="Pingüino">
+              <span class="avatar-box">🐧</span>
+            </label>
+            <label>
+              <input type="radio" name="avatar" value="🦊" aria-label="Zorro">
+              <span class="avatar-box">🦊</span>
+            </label>
+          </div>
+        </fieldset>
+      </form>
+      <!-- Aquí se insertan las estadísticas y extensiones desde script.js -->
+    </section>
+  </main>
+
+  <!-- Overlay de countdown -->
+  <div id="countdown-overlay" class="countdown-overlay" aria-modal="true" role="dialog" aria-label="Cuenta regresiva">
+    <div class="countdown-content">
+      <div id="countdown-number" aria-live="assertive">3</div>
+      <div id="countdown-text">¡Prepárate!</div>
+    </div>
+  </div>
+
+  <!-- Modal de pista -->
+  <div id="hint-modal" class="hint-modal" aria-modal="true" role="dialog" aria-label="Modal de pista">
+    <div class="hint-content">
+      <div class="hint-header">
+        <h3 id="hint-title">💡 Pista</h3>
+        <button class="hint-close" id="hint-close" aria-label="Cerrar pista">×</button>
+      </div>
+      <div class="hint-body">
+        <p id="hint-text"></p>
+      </div>
+      <div class="hint-footer">
+        <button class="hint-btn" id="hint-ok" aria-label="Aceptar pista">Entendido</button>
+        <small id="hint-warning">Solo puedes usar una pista por partida</small>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
